@@ -7,9 +7,6 @@ import (
 )
 
 func main() {
-	fmt.Println("initialize counters")
-	counters = make(map[string]int)
-
 	http.HandleFunc("/counters/increment", incrementHandler)
 	http.HandleFunc("/counters/create", createHandler)
 
