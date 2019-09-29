@@ -6,22 +6,44 @@ import (
 )
 
 type Service interface {
-	Fetch(ID string) (counters.Counter, error)
+	FetchCounterByID(id string) (counters.Counter, error)
+	FetchUserByID(id string) (counters.User, error)
+	FetchUserByEmail(email string) (counters.User, error)
 }
 
 type service struct {
 	counters counters.CounterRepository
+	users    counters.UserRepository
 }
 
-func NewFetchService(cR counters.CounterRepository) Service {
-	return &service{counters:cR}
+func NewFetchService(cR counters.CounterRepository, uR counters.UserRepository) Service {
+	return &service{counters: cR, users: uR}
 }
 
-func (s *service) Fetch(ID string) (counters.Counter, error) {
-	counter, err := s.counters.Get(ID)
+func (s *service) FetchCounterByID(id string) (counters.Counter, error) {
+	counter, err := s.counters.Get(id)
 	if err != nil {
-		return counters.Counter{}, errors.WrapNotFound(err, "counter with id %s not found", ID)
+		return counters.Counter{}, errors.WrapNotFound(err, "counter with id %s not found", id)
 	}
 
 	return *counter, nil
+}
+
+func (s *service) FetchUserByEmail(email string) (counters.User, error) {
+	user, err := s.users.GetByEmail(email)
+	if err != nil {
+		return counters.User{}, errors.WrapNotFound(err, "user with id %s not found", email)
+	}
+
+	return *user, nil
+}
+
+func (s *service) FetchUserByID(id string) (counters.User, error) {
+	user, err := s.users.Get(id)
+	if err != nil {
+		return counters.User{}, errors.WrapNotFound(err, "user with id %s not found", id)
+	}
+
+	return *user, nil
+
 }

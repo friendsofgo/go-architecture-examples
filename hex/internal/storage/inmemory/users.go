@@ -35,6 +35,15 @@ func (r *usersInMemoryRepository) Get(ID string) (*counters.User, error) {
 	return &user, nil
 }
 
+func (r *usersInMemoryRepository) GetByEmail(email string) (*counters.User, error) {
+	for _, user := range r.users {
+		if user.Email == email {
+			return &user, nil
+		}
+	}
+	return nil, errors.NewNotFound("user with email %s not found", email)
+}
+
 func (r *usersInMemoryRepository) Save(user counters.User) error {
 	r.users[user.ID] = user
 	return nil

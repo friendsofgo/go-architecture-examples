@@ -7,7 +7,7 @@ import (
 
 type Service interface {
 	CreateCounter(name, belongsTo string) (counters.Counter, error)
-	CreateUser(id, mail string) (counters.User, error)
+	CreateUser(name, email, password string) (counters.User, error)
 }
 
 type service struct {
@@ -33,11 +33,16 @@ func (s *service) CreateCounter(name, belongsTo string) (counters.Counter, error
 	return *newCounter, nil
 }
 
-func (s *service) CreateUser(id, mail string) (counters.User, error) {
-	newUser := counters.NewUser(id, mail)
-	err := s.users.Save(*newUser)
+func (s *service) CreateUser(name, email, password string) (counters.User, error) {
+	newUser, err := counters.NewUser(name, email, password)
 	if err != nil {
-		return counters.User{}, errors.WrapNotSavable(err, "user with id %s cannot be saved", id)
+		return counters.User{}, err
 	}
+
+	err = s.users.Save(*newUser)
+	if err != nil {
+		return counters.User{}, errors.WrapNotSavable(err, "user with email %s cannot be saved", email)
+	}
+
 	return *newUser, nil
 }

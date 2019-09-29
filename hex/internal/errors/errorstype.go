@@ -61,3 +61,23 @@ func IsWrongInput(err error) bool {
 	var target *wrongInput
 	return errors.As(err, &target)
 }
+
+type notAuthorized struct {
+	error
+}
+
+// NewNotAuthorized returns an error which wraps err that satisfies IsNotAuthorized().
+func NewNotAuthorized(format string, args ...interface{}) error {
+	return &notAuthorized{errors.Errorf(format, args...)}
+}
+
+// WrapNotAuthorized returns an error which wraps err that satisfies IsNotAuthorized()
+func WrapNotAuthorized(err error, format string, args ...interface{}) error {
+	return &notAuthorized{errors.Wrapf(err, format, args...)}
+}
+
+// IsNotAuthorized reports whether err was created with NewNotAuthorized or WrapNotAuthorized
+func IsNotAuthorized(err error) bool {
+	var target *notAuthorized
+	return errors.As(err, &target)
+}
