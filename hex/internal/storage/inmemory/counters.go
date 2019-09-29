@@ -7,18 +7,18 @@ import (
 	"github.com/friendsofgo/go-architecture-examples/hex/internal/errors"
 )
 
-type countersInMemoryRepository struct {
+type countersRepository struct {
 	counters map[string]counters.Counter
 }
 
 var (
 	countersOnce     sync.Once
-	countersInstance *countersInMemoryRepository
+	countersInstance *countersRepository
 )
 
 func NewCountersRepository() counters.CounterRepository {
 	countersOnce.Do(func() {
-		countersInstance = &countersInMemoryRepository{
+		countersInstance = &countersRepository{
 			counters: make(map[string]counters.Counter),
 		}
 	})
@@ -26,7 +26,7 @@ func NewCountersRepository() counters.CounterRepository {
 	return countersInstance
 }
 
-func (r *countersInMemoryRepository) Get(ID string) (*counters.Counter, error) {
+func (r *countersRepository) Get(ID string) (*counters.Counter, error) {
 	counter, ok := r.counters[ID]
 	if !ok {
 		return nil, errors.NewNotFound("counter with id %s not found", ID)
@@ -35,7 +35,7 @@ func (r *countersInMemoryRepository) Get(ID string) (*counters.Counter, error) {
 	return &counter, nil
 }
 
-func (r *countersInMemoryRepository) Save(counter counters.Counter) error {
+func (r *countersRepository) Save(counter counters.Counter) error {
 	r.counters[counter.ID] = counter
 	return nil
 }

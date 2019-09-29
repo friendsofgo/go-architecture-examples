@@ -7,18 +7,18 @@ import (
 	"github.com/friendsofgo/go-architecture-examples/hex/internal/errors"
 )
 
-type usersInMemoryRepository struct {
+type usersRepository struct {
 	users map[string]counters.User
 }
 
 var (
 	usersOnce     sync.Once
-	usersInstance *usersInMemoryRepository
+	usersInstance *usersRepository
 )
 
-func NewUsersInMemoryRepository() counters.UserRepository {
+func NewUsersRepository() counters.UserRepository {
 	usersOnce.Do(func() {
-		usersInstance = &usersInMemoryRepository{
+		usersInstance = &usersRepository{
 			users: make(map[string]counters.User),
 		}
 	})
@@ -26,7 +26,7 @@ func NewUsersInMemoryRepository() counters.UserRepository {
 	return usersInstance
 }
 
-func (r *usersInMemoryRepository) Get(ID string) (*counters.User, error) {
+func (r *usersRepository) Get(ID string) (*counters.User, error) {
 	user, ok := r.users[ID]
 	if !ok {
 		return nil, errors.NewNotFound("user with id %s not found", ID)
@@ -35,7 +35,7 @@ func (r *usersInMemoryRepository) Get(ID string) (*counters.User, error) {
 	return &user, nil
 }
 
-func (r *usersInMemoryRepository) GetByEmail(email string) (*counters.User, error) {
+func (r *usersRepository) GetByEmail(email string) (*counters.User, error) {
 	for _, user := range r.users {
 		if user.Email == email {
 			return &user, nil
@@ -44,7 +44,7 @@ func (r *usersInMemoryRepository) GetByEmail(email string) (*counters.User, erro
 	return nil, errors.NewNotFound("user with email %s not found", email)
 }
 
-func (r *usersInMemoryRepository) Save(user counters.User) error {
+func (r *usersRepository) Save(user counters.User) error {
 	r.users[user.ID] = user
 	return nil
 }
