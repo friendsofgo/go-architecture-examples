@@ -25,7 +25,7 @@ const (
 func main() {
 
 	var (
-		countersRepository = inmemory.NewCountersInMemoryRepository()
+		countersRepository = inmemory.NewCountersRepository()
 		usersRepository   = inmemory.NewUsersInMemoryRepository()
 
 		fetchService     = fetching.NewFetchService(countersRepository, usersRepository)

@@ -16,7 +16,7 @@ var (
 	countersInstance *countersInMemoryRepository
 )
 
-func NewCountersInMemoryRepository() counters.CounterRepository {
+func NewCountersRepository() counters.CounterRepository {
 	countersOnce.Do(func() {
 		countersInstance = &countersInMemoryRepository{
 			counters: make(map[string]counters.Counter),
