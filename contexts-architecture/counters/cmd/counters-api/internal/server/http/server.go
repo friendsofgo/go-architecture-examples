@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	jwt2 "github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/cmd/counters/internal/server/http/jwt"
+	jwt2 "github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/cmd/counters-api/internal/server/http/jwt"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/creating"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/fetching"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/incrementing"

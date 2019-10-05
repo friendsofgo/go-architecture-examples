@@ -11,7 +11,7 @@ import (
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/incrementing"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/storage/inmemory"
 
-	httpserver "github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/cmd/counters/internal/server/http"
+	httpserver "github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/cmd/counters-api/internal/server/http"
 )
 
 const (

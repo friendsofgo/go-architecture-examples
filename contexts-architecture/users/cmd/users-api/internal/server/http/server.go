@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/cmd/users/internal/server/http/jwt"
+	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/cmd/users-api/internal/server/http/jwt"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/internal/users/creating"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/internal/users/fetching"
 
