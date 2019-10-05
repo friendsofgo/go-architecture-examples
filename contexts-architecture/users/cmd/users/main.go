@@ -10,7 +10,7 @@ import (
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/internal/users/fetching"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/internal/users/storage/inmemory"
 
-	httpserver "github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/cmd/internal/server/http"
+	httpserver "github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/cmd/users/internal/server/http"
 )
 
 const (

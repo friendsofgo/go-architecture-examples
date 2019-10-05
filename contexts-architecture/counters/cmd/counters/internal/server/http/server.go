@@ -3,8 +3,7 @@ package http
 import (
 	"net/http"
 
-	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/cmd/internal/server/http/jwt"
-
+	jwt2 "github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/cmd/counters/internal/server/http/jwt"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/creating"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/fetching"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/incrementing"
@@ -21,7 +20,7 @@ func MainHandler(
 	r := gin.New()
 
 	// Auth (JWT) handler initialization
-	authMiddleware, err := jwt.NewGinMiddleware()
+	authMiddleware, err := jwt2.NewGinMiddleware()
 	if err != nil {
 		return nil, err
 	}

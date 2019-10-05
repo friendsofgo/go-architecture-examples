@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/cmd/internal/server/http/jwt"
-
 	"github.com/gin-gonic/gin"
 
+	jwt2 "github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/cmd/counters/internal/server/http/jwt"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/creating"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/fetching"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/counters/internal/counters/incrementing"
@@ -22,8 +21,8 @@ func createCounterHandlerBuilder(createService creating.Service) func(c *gin.Con
 			return
 		}
 
-		authorizedUserData, _ := c.Get(jwt.IdentityKey)
-		authorizedUser := authorizedUserData.(jwt.User)
+		authorizedUserData, _ := c.Get(jwt2.IdentityKey)
+		authorizedUser := authorizedUserData.(jwt2.User)
 
 		counter, err := createService.Create(req.Name, authorizedUser.ID)
 		if err != nil {
@@ -59,8 +58,8 @@ func getCounterHandlerBuilder(
 			return
 		}
 
-		authorizedUserData, _ := c.Get(jwt.IdentityKey)
-		authorizedUser := authorizedUserData.(jwt.User)
+		authorizedUserData, _ := c.Get(jwt2.IdentityKey)
+		authorizedUser := authorizedUserData.(jwt2.User)
 		if authorizedUser.ID != counter.BelongsTo {
 			errMsg := fmt.Sprintf("user id %s is not authorized to read the counter %s", authorizedUser.ID, counterID)
 			c.JSON(http.StatusForbidden, gin.H{"error": errMsg})
@@ -96,8 +95,8 @@ func incrementCounterHandlerBuilder(
 			return
 		}
 
-		authorizedUserData, _ := c.Get(jwt.IdentityKey)
-		authorizedUser := authorizedUserData.(jwt.User)
+		authorizedUserData, _ := c.Get(jwt2.IdentityKey)
+		authorizedUser := authorizedUserData.(jwt2.User)
 		if authorizedUser.ID != counter.BelongsTo {
 			errMsg := fmt.Sprintf("user id %s is not authorized to increment the counter %s", authorizedUser.ID, req.ID)
 			c.JSON(http.StatusForbidden, gin.H{"error": errMsg})

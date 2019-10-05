@@ -3,8 +3,7 @@ package http
 import (
 	"net/http"
 
-	jwt2 "github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/cmd/internal/server/http/jwt"
-
+	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/cmd/users/internal/server/http/jwt"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/internal/users/creating"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/internal/users/fetching"
 
@@ -19,7 +18,7 @@ func MainHandler(
 	r := gin.New()
 
 	// Auth (JWT) handler initialization
-	authMiddleware, err := jwt2.NewGinMiddleware(fetchService)
+	authMiddleware, err := jwt.NewGinMiddleware(fetchService)
 	if err != nil {
 		return nil, err
 	}

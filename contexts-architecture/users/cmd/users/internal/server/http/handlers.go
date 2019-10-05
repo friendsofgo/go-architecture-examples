@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	jwt2 "github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/cmd/internal/server/http/jwt"
-
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/kit/errors"
+	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/cmd/users/internal/server/http/jwt"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/internal/users/creating"
 	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/internal/users/fetching"
 
@@ -17,8 +16,8 @@ func getUserHandlerBuilder(
 	fetchService fetching.Service,
 ) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		authorizedUserData, _ := c.Get(jwt2.IdentityKey)
-		authorizedUser := authorizedUserData.(jwt2.User)
+		authorizedUserData, _ := c.Get(jwt.IdentityKey)
+		authorizedUser := authorizedUserData.(jwt.User)
 
 		userID := c.Param("userID")
 		if authorizedUser.ID != userID {
