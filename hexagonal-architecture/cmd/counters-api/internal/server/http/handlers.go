@@ -6,11 +6,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/cmd/counters-api/internal/server/jwt"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/errors"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementing"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/server/jwt"
 )
 
 func createCounterHandlerBuilder(createService creating.Service) func(c *gin.Context) {

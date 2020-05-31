@@ -6,12 +6,11 @@ import (
 	"net/http"
 	"time"
 
+	countershttp "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/cmd/counters-api/internal/server/http"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementing"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/storage/inmemory"
-
-	countershttp "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/server/http"
 )
 
 const (
@@ -26,7 +25,7 @@ func main() {
 
 	var (
 		countersRepository = inmemory.NewCountersRepository()
-		usersRepository   = inmemory.NewUsersRepository()
+		usersRepository    = inmemory.NewUsersRepository()
 
 		fetchService     = fetching.NewFetchService(countersRepository, usersRepository)
 		createService    = creating.NewCreateService(countersRepository, usersRepository)

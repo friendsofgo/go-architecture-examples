@@ -3,10 +3,10 @@ package http
 import (
 	"net/http"
 
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/cmd/counters-api/internal/server/jwt"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementing"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/server/jwt"
 
 	"github.com/gin-gonic/gin"
 )
