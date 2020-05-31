@@ -7,13 +7,13 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/cmd/counters-api/internal/server/jwt"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creator"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/errors"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementing"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetcher"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementer"
 )
 
-func createCounterHandlerBuilder(createService creating.Service) func(c *gin.Context) {
+func createCounterHandlerBuilder(createService creator.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var req CreateCounterRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
@@ -44,7 +44,7 @@ func createCounterHandlerBuilder(createService creating.Service) func(c *gin.Con
 }
 
 func getCounterHandlerBuilder(
-	fetchService fetching.Service,
+	fetchService fetcher.Service,
 ) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		counterID := c.Param("counterID")
@@ -75,8 +75,8 @@ func getCounterHandlerBuilder(
 }
 
 func incrementCounterHandlerBuilder(
-	fetchService fetching.Service,
-	incrementService incrementing.Service,
+	fetchService fetcher.Service,
+	incrementService incrementer.Service,
 ) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var req IncrementCounterRequest
@@ -118,7 +118,7 @@ func incrementCounterHandlerBuilder(
 }
 
 func getUserHandlerBuilder(
-	fetchService fetching.Service,
+	fetchService fetcher.Service,
 ) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		authorizedUserData, _ := c.Get(jwt.IdentityKey)
@@ -148,7 +148,7 @@ func getUserHandlerBuilder(
 	}
 }
 
-func createUserHandlerBuilder(createService creating.Service) func(c *gin.Context) {
+func createUserHandlerBuilder(createService creator.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var req CreateUserRequest
 		if err := c.ShouldBindJSON(&req); err != nil {

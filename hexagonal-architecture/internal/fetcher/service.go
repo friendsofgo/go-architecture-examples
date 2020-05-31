@@ -1,4 +1,4 @@
-package fetching
+package fetcher
 
 import (
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
@@ -16,7 +16,7 @@ type service struct {
 	users    counters.UserRepository
 }
 
-func NewFetchService(cR counters.CounterRepository, uR counters.UserRepository) Service {
+func NewService(cR counters.CounterRepository, uR counters.UserRepository) Service {
 	return &service{counters: cR, users: uR}
 }
 

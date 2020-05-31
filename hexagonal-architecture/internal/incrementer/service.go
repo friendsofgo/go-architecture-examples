@@ -1,4 +1,4 @@
-package incrementing
+package incrementer
 
 import (
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
@@ -13,7 +13,7 @@ type service struct {
 	counters  counters.CounterRepository
 }
 
-func NewIncrementService(cR counters.CounterRepository) Service {
+func NewService(cR counters.CounterRepository) Service {
 	return &service{counters: cR}
 }
 

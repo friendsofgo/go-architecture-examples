@@ -7,9 +7,9 @@ import (
 	"time"
 
 	countershttp "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/cmd/counters-api/internal/server/http"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementing"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creator"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetcher"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementer"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/storage/inmemory"
 )
 
@@ -27,14 +27,14 @@ func main() {
 		countersRepository = inmemory.NewCountersRepository()
 		usersRepository    = inmemory.NewUsersRepository()
 
-		fetchService     = fetching.NewFetchService(countersRepository, usersRepository)
-		createService    = creating.NewCreateService(countersRepository, usersRepository)
-		incrementService = incrementing.NewIncrementService(countersRepository)
+		fetcherService     = fetcher.NewService(countersRepository, usersRepository)
+		creatorService     = creator.NewService(countersRepository, usersRepository)
+		incrementerService = incrementer.NewService(countersRepository)
 
 		apiAddress = fmt.Sprintf("%s:%d", ApiHostDefault, ApiPortDefault)
 	)
 
-	handler, err := countershttp.MainHandler(fetchService, createService, incrementService)
+	handler, err := countershttp.MainHandler(fetcherService, creatorService, incrementerService)
 	if err != nil {
 		log.Fatal(err)
 	}

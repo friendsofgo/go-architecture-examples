@@ -1,4 +1,4 @@
-package creating
+package creator
 
 import (
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
@@ -15,7 +15,7 @@ type service struct {
 	users     counters.UserRepository
 }
 
-func NewCreateService(cR counters.CounterRepository, uR counters.UserRepository) Service {
+func NewService(cR counters.CounterRepository, uR counters.UserRepository) Service {
 	return &service{counters: cR, users: uR}
 }
 
