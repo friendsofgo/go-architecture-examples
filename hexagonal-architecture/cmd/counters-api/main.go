@@ -7,10 +7,10 @@ import (
 	"time"
 
 	countershttp "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/cmd/counters-api/internal/server/http"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creator"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetcher"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementer"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/storage/inmemory"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementing"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/platform/storage/inmemory"
 )
 
 const (
@@ -27,9 +27,9 @@ func main() {
 		countersRepository = inmemory.NewCountersRepository()
 		usersRepository    = inmemory.NewUsersRepository()
 
-		fetcherService     = fetcher.NewService(countersRepository, usersRepository)
-		creatorService     = creator.NewService(countersRepository, usersRepository)
-		incrementerService = incrementer.NewService(countersRepository)
+		fetcherService     = fetching.NewService(countersRepository, usersRepository)
+		creatorService     = creating.NewService(countersRepository, usersRepository)
+		incrementerService = incrementing.NewService(countersRepository)
 
 		apiAddress = fmt.Sprintf("%s:%d", ApiHostDefault, ApiPortDefault)
 	)

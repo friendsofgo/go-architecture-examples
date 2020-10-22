@@ -1,4 +1,4 @@
-package fetcher
+package fetching
 
 import (
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"

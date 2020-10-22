@@ -4,17 +4,17 @@ import (
 	"net/http"
 
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/cmd/counters-api/internal/server/jwt"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creator"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetcher"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementer"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementing"
 
 	"github.com/gin-gonic/gin"
 )
 
 func MainHandler(
-	fetchService fetcher.Service,
-	createService creator.Service,
-	incrementService incrementer.Service,
+	fetchService fetching.Service,
+	createService creating.Service,
+	incrementService incrementing.Service,
 ) (http.Handler, error) {
 
 	r := gin.New()

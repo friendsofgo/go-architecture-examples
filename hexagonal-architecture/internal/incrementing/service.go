@@ -1,4 +1,4 @@
-package incrementer
+package incrementing
 
 import (
 	"fmt"

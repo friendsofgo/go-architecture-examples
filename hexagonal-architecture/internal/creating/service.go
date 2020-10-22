@@ -1,4 +1,4 @@
-package creator
+package creating
 
 import (
 	"fmt"
