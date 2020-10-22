@@ -37,9 +37,9 @@ func Run() error {
 }
 
 func runServer(
-	fetchingService fetching.Service,
-	creatingService creating.Service,
-	incrementingService incrementing.Service,
+	fetchingService fetching.DefaultService,
+	creatingService creating.DefaultService,
+	incrementingService incrementing.DefaultService,
 ) error {
 	httpAddr := fmt.Sprintf("%s:%d", ApiHostDefault, ApiPortDefault)
 	srv := http.NewServer(httpAddr)

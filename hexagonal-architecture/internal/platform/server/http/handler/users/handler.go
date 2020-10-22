@@ -12,7 +12,7 @@ import (
 )
 
 func GetUserHandlerBuilder(
-	fetchService fetching.Service,
+	fetchService fetching.DefaultService,
 ) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		authorizedUserData, _ := c.Get(jwt.IdentityKey)
@@ -42,7 +42,7 @@ func GetUserHandlerBuilder(
 	}
 }
 
-func CreateUserHandlerBuilder(createService creating.Service) func(c *gin.Context) {
+func CreateUserHandlerBuilder(createService creating.DefaultService) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var req CreateUserRequest
 		if err := c.ShouldBindJSON(&req); err != nil {

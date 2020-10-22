@@ -13,7 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateCounterHandlerBuilder(createService creating.Service) func(c *gin.Context) {
+func CreateCounterHandlerBuilder(createService creating.DefaultService) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var req CreateCounterRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
@@ -43,7 +43,7 @@ func CreateCounterHandlerBuilder(createService creating.Service) func(c *gin.Con
 	}
 }
 
-func GetCounterHandlerBuilder(fetchService fetching.Service) func(c *gin.Context) {
+func GetCounterHandlerBuilder(fetchService fetching.DefaultService) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		counterID := c.Param("counterID")
 		counter, err := fetchService.FetchCounterByID(counterID)
@@ -73,8 +73,8 @@ func GetCounterHandlerBuilder(fetchService fetching.Service) func(c *gin.Context
 }
 
 func IncrementCounterHandlerBuilder(
-	fetchService fetching.Service,
-	incrementService incrementing.Service,
+	fetchService fetching.DefaultService,
+	incrementService incrementing.DefaultService,
 ) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var req IncrementCounterRequest

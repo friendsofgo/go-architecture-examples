@@ -18,7 +18,7 @@ const (
 )
 
 // NewGinMiddleware returns a JWT middleware for Gin
-func NewGinMiddleware(fetchService fetching.Service) (*jwt.GinJWTMiddleware, error) {
+func NewGinMiddleware(fetchService fetching.DefaultService) (*jwt.GinJWTMiddleware, error) {
 	key := []byte(authKey)
 
 	return jwt.New(&jwt.GinJWTMiddleware{
@@ -59,7 +59,7 @@ type LoginRequest struct {
 	Password string `form:"password" json:"password" binding:"required"`
 }
 
-func authHandlerBuilder(fetchService fetching.Service) func(c *gin.Context) (interface{}, error) {
+func authHandlerBuilder(fetchService fetching.DefaultService) func(c *gin.Context) (interface{}, error) {
 	return func(c *gin.Context) (i interface{}, e error) {
 		var req LoginRequest
 		if err := c.ShouldBind(&req); err != nil {

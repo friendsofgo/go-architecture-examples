@@ -21,9 +21,7 @@ type User struct {
 	HashedPassword string
 }
 
-func NewUser(name, email, password string) (*User, error) {
-	// validations about your user creation here...
-
+func NewUser(name, email, password string) (User, error) {
 	u := User{
 		ID:    ulid.New(),
 		Name:  name,
@@ -32,11 +30,10 @@ func NewUser(name, email, password string) (*User, error) {
 
 	err := u.HashPassword(password)
 	if err != nil {
-		return nil, fmt.Errorf("password cannot be hashed correctly: %w", ErrCreatingUser)
+		return User{}, fmt.Errorf("password cannot be hashed correctly: %w", ErrCreatingUser)
 	}
 
-
-	return &u, nil
+	return u, nil
 }
 
 func (u *User) HashPassword(password string) error {
@@ -49,7 +46,7 @@ func (u *User) HashPassword(password string) error {
 }
 
 type UserRepository interface {
-	Get(ID string) (*User, error)
-	GetByEmail(email string) (*User, error)
+	Get(ID string) (User, error)
+	GetByEmail(email string) (User, error)
 	Save(user User) error
 }
