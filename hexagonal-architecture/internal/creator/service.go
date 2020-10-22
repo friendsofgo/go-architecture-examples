@@ -1,8 +1,9 @@
 package creator
 
 import (
+	"fmt"
+
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/errors"
 )
 
 type Service interface {
@@ -11,8 +12,8 @@ type Service interface {
 }
 
 type service struct {
-	counters  counters.CounterRepository
-	users     counters.UserRepository
+	counters counters.CounterRepository
+	users    counters.UserRepository
 }
 
 func NewService(cR counters.CounterRepository, uR counters.UserRepository) Service {
@@ -27,7 +28,7 @@ func (s *service) CreateCounter(name, belongsTo string) (counters.Counter, error
 
 	err = s.counters.Save(*newCounter)
 	if err != nil {
-		return counters.Counter{}, errors.WrapNotSavable(err, "counter with name %s cannot be saved", name)
+		return counters.Counter{}, fmt.Errorf( "counter with name %s cannot be saved", name)
 	}
 
 	return *newCounter, nil
@@ -41,7 +42,7 @@ func (s *service) CreateUser(name, email, password string) (counters.User, error
 
 	err = s.users.Save(*newUser)
 	if err != nil {
-		return counters.User{}, errors.WrapNotSavable(err, "user with email %s cannot be saved", email)
+		return counters.User{}, fmt.Errorf("user with email %s cannot be saved", email)
 	}
 
 	return *newUser, nil

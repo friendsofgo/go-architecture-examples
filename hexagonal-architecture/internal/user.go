@@ -1,10 +1,17 @@
 package counters
 
 import (
+	"errors"
+	"fmt"
+
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/errors"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/kit/ulid"
+)
+
+var (
+	ErrUserNotFound = errors.New("user not found")
+	ErrCreatingUser = errors.New("err creating user")
 )
 
 type User struct {
@@ -25,7 +32,7 @@ func NewUser(name, email, password string) (*User, error) {
 
 	err := u.HashPassword(password)
 	if err != nil {
-		return nil, errors.WrapWrongInput(err, "user password %s cannot be hashed", password)
+		return nil, fmt.Errorf("password cannot be hashed correctly: %w", ErrCreatingUser)
 	}
 
 

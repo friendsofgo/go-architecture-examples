@@ -1,14 +1,15 @@
 package http
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
+	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
 	"github.com/gin-gonic/gin"
 
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/cmd/counters-api/internal/server/jwt"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creator"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/errors"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetcher"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementer"
 )
@@ -26,7 +27,7 @@ func createCounterHandlerBuilder(createService creator.Service) func(c *gin.Cont
 
 		counter, err := createService.CreateCounter(req.Name, authorizedUser.ID)
 		if err != nil {
-			if errors.IsWrongInput(err) {
+			if errors.Is(err, counters.ErrCreatingUser) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -50,7 +51,7 @@ func getCounterHandlerBuilder(
 		counterID := c.Param("counterID")
 		counter, err := fetchService.FetchCounterByID(counterID)
 		if err != nil {
-			if errors.IsNotFound(err) {
+			if errors.Is(err, counters.ErrCounterNotFound) {
 				c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -87,7 +88,7 @@ func incrementCounterHandlerBuilder(
 
 		counter, err := fetchService.FetchCounterByID(req.ID)
 		if err != nil {
-			if errors.IsNotFound(err) {
+			if errors.Is(err, counters.ErrCounterNotFound) {
 				c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -105,7 +106,7 @@ func incrementCounterHandlerBuilder(
 
 		err = incrementService.Increment(req.ID)
 		if err != nil {
-			if errors.IsNotFound(err) {
+			if errors.Is(err, counters.ErrCounterNotFound) {
 				c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -132,7 +133,7 @@ func getUserHandlerBuilder(
 
 		user, err := fetchService.FetchUserByID(userID)
 		if err != nil {
-			if errors.IsNotFound(err) {
+			if errors.Is(err, counters.ErrUserNotFound) {
 				c.JSON(http.StatusNotFound, gin.H{"error": err})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err})
@@ -158,7 +159,7 @@ func createUserHandlerBuilder(createService creator.Service) func(c *gin.Context
 
 		user, err := createService.CreateUser(req.Name, req.Email, req.Password)
 		if err != nil {
-			if errors.IsWrongInput(err) {
+			if  errors.Is(err, counters.ErrCreatingUser) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

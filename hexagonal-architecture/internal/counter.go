@@ -1,6 +1,7 @@
 package counters
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/errors"
@@ -20,9 +21,14 @@ type Counter struct {
 	BelongsTo  string
 }
 
+var (
+	ErrCounterNotFound = errors.New("counter not found")
+	ErrNameTooShort = errors.New("the receive name is too short")
+)
+
 func NewCounter(name, belongsTo string) (*Counter, error) {
 	if len(name) < minNameLength {
-		return nil, errors.NewWrongInput("counter name %s is too short", name)
+		return nil, fmt.Errorf("min value is: %d: %w", minNameLength, ErrNameTooShort)
 	}
 
 	return &Counter{

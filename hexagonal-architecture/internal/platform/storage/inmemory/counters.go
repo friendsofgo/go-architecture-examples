@@ -1,10 +1,10 @@
 package inmemory
 
 import (
+	"fmt"
 	"sync"
 
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/errors"
 )
 
 type countersRepository struct {
@@ -29,7 +29,7 @@ func NewCountersRepository() counters.CounterRepository {
 func (r *countersRepository) Get(ID string) (*counters.Counter, error) {
 	counter, ok := r.counters[ID]
 	if !ok {
-		return nil, errors.NewNotFound("counter with id %s not found", ID)
+		return nil, fmt.Errorf("counter id %s : %w", ID, counters.ErrCounterNotFound)
 	}
 
 	return &counter, nil

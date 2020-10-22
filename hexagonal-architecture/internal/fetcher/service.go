@@ -2,7 +2,6 @@ package fetcher
 
 import (
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/errors"
 )
 
 type Service interface {
@@ -23,7 +22,7 @@ func NewService(cR counters.CounterRepository, uR counters.UserRepository) Servi
 func (s *service) FetchCounterByID(id string) (counters.Counter, error) {
 	counter, err := s.counters.Get(id)
 	if err != nil {
-		return counters.Counter{}, errors.WrapNotFound(err, "counter with id %s not found", id)
+		return counters.Counter{}, err
 	}
 
 	return *counter, nil
@@ -32,7 +31,7 @@ func (s *service) FetchCounterByID(id string) (counters.Counter, error) {
 func (s *service) FetchUserByEmail(email string) (counters.User, error) {
 	user, err := s.users.GetByEmail(email)
 	if err != nil {
-		return counters.User{}, errors.WrapNotFound(err, "user with id %s not found", email)
+		return counters.User{}, err
 	}
 
 	return *user, nil
@@ -41,7 +40,7 @@ func (s *service) FetchUserByEmail(email string) (counters.User, error) {
 func (s *service) FetchUserByID(id string) (counters.User, error) {
 	user, err := s.users.Get(id)
 	if err != nil {
-		return counters.User{}, errors.WrapNotFound(err, "user with id %s not found", id)
+		return counters.User{}, err
 	}
 
 	return *user, nil

@@ -1,10 +1,10 @@
 package inmemory
 
 import (
+	"fmt"
 	"sync"
 
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/errors"
 )
 
 type usersRepository struct {
@@ -29,7 +29,7 @@ func NewUsersRepository() counters.UserRepository {
 func (r *usersRepository) Get(ID string) (*counters.User, error) {
 	user, ok := r.users[ID]
 	if !ok {
-		return nil, errors.NewNotFound("user with id %s not found", ID)
+		return nil, fmt.Errorf("user id %s: %w", ID, counters.ErrUserNotFound)
 	}
 
 	return &user, nil
@@ -41,7 +41,7 @@ func (r *usersRepository) GetByEmail(email string) (*counters.User, error) {
 			return &user, nil
 		}
 	}
-	return nil, errors.NewNotFound("user with email %s not found", email)
+	return nil, fmt.Errorf("user email %s: %w", email, counters.ErrUserNotFound)
 }
 
 func (r *usersRepository) Save(user counters.User) error {
