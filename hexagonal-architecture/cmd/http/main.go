@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/platform/bootstrap"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/cmd/http/bootstrap"
 )
 
 func main() {

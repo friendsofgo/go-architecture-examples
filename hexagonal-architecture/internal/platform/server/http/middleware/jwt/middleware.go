@@ -12,8 +12,8 @@ import (
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
 )
 
-// NewJWTMiddleware returns a JWT middleware for Gin
-func NewJWTMiddleware(fetchService fetching.Service) (*jwt.GinJWTMiddleware, error) {
+// NewMiddleware returns a JWT middleware for Gin
+func NewMiddleware(fetchService fetching.Service) (*jwt.GinJWTMiddleware, error) {
 	key := []byte(http.AuthKey)
 
 	return jwt.New(&jwt.GinJWTMiddleware{

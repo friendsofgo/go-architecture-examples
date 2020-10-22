@@ -46,7 +46,7 @@ func runServer(
 	srv := http.NewServer(httpAddr)
 
 	// Auth (JWT) handler initialization
-	authMiddleware, err := jwt.NewJWTMiddleware(fetchingService)
+	authMiddleware, err := jwt.NewMiddleware(fetchingService)
 	if err != nil {
 		return err
 	}
