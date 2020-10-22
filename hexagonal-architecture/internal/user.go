@@ -11,7 +11,7 @@ import (
 
 var (
 	ErrUserNotFound = errors.New("user not found")
-	ErrCreatingUser = errors.New("err creating user")
+	ErrCreatingUser = errors.New("error happened while creating a new user")
 )
 
 type User struct {

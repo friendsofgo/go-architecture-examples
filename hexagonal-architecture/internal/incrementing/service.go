@@ -4,19 +4,19 @@ import (
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
 )
 
-type DefaultService interface {
+type Service interface {
 	Increment(ID string) error
 }
 
-type Service struct {
+type DefaultService struct {
 	counters counters.CounterRepository
 }
 
-func NewService(cR counters.CounterRepository) Service {
-	return Service{counters: cR}
+func NewService(cR counters.CounterRepository) DefaultService {
+	return DefaultService{counters: cR}
 }
 
-func (s Service) Increment(ID string) error {
+func (s DefaultService) Increment(ID string) error {
 	counter, err := s.counters.Get(ID)
 	if err != nil {
 		return err

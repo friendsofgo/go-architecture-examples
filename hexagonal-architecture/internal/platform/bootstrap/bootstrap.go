@@ -38,31 +38,31 @@ func Run() error {
 }
 
 func runServer(
-	fetchingService fetching.DefaultService,
-	creatingService creating.DefaultService,
-	incrementingService incrementing.DefaultService,
+	fetchingService fetching.Service,
+	creatingService creating.Service,
+	incrementingService incrementing.Service,
 ) error {
 	httpAddr := fmt.Sprintf("%s:%d", ApiHostDefault, ApiPortDefault)
 	srv := http.NewServer(httpAddr)
 
 	// Auth (JWT) handler initialization
-	authMiddleware, err := jwt.NewGinMiddleware(fetchingService)
+	authMiddleware, err := jwt.NewJWTMiddleware(fetchingService)
 	if err != nil {
 		return err
 	}
 
 	srv.Use(gin.Logger(), gin.Recovery())
 
-	srv.POST("/users/register", users.CreateUserHandlerBuilder(creatingService))
+	srv.POST("/users/register", users.CreateUser(creatingService))
 	srv.POST("/users/login", authMiddleware.LoginHandler)
 
 	auth := srv.Group("")
 	auth.Use(authMiddleware.MiddlewareFunc())
 
-	auth.GET("/users/:userID", users.GetUserHandlerBuilder(fetchingService))
-	auth.POST("/counters", counters.CreateCounterHandlerBuilder(creatingService))
-	auth.GET("/counters/:counterID", counters.GetCounterHandlerBuilder(fetchingService))
-	auth.POST("/counters/increment", counters.IncrementCounterHandlerBuilder(fetchingService, incrementingService))
+	auth.GET("/users/:userID", users.GetUser(fetchingService))
+	auth.POST("/counters", counters.CreateCounter(creatingService))
+	auth.GET("/counters/:counterID", counters.GetCounter(fetchingService))
+	auth.POST("/counters/increment", counters.IncrementCounter(fetchingService, incrementingService))
 
 	log.Println("Server on tap:", httpAddr)
 	return srv.Run()

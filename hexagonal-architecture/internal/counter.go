@@ -15,7 +15,7 @@ const (
 
 var (
 	ErrCounterNotFound = errors.New("counter not found")
-	ErrNameTooShort    = errors.New("the receive name is too short")
+	ErrNameTooShort    = errors.New("counter name is too short")
 )
 
 type Counter struct {

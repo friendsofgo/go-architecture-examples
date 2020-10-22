@@ -12,8 +12,8 @@ import (
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
 )
 
-// NewGinMiddleware returns a JWT middleware for Gin
-func NewGinMiddleware(fetchService fetching.DefaultService) (*jwt.GinJWTMiddleware, error) {
+// NewJWTMiddleware returns a JWT middleware for Gin
+func NewJWTMiddleware(fetchService fetching.Service) (*jwt.GinJWTMiddleware, error) {
 	key := []byte(http.AuthKey)
 
 	return jwt.New(&jwt.GinJWTMiddleware{
@@ -24,8 +24,8 @@ func NewGinMiddleware(fetchService fetching.DefaultService) (*jwt.GinJWTMiddlewa
 		IdentityKey:     http.IdentityKey,
 		PayloadFunc:     payloadHandler,
 		IdentityHandler: identityHandler,
-		Authenticator:   authHandlerBuilder(fetchService),
-		Unauthorized:    unauthorizedHandler,
+		Authenticator:   auth(fetchService),
+		Unauthorized:    unauthorized,
 	})
 }
 
@@ -54,7 +54,7 @@ type LoginRequest struct {
 	Password string `form:"password" json:"password" binding:"required"`
 }
 
-func authHandlerBuilder(fetchService fetching.DefaultService) func(c *gin.Context) (interface{}, error) {
+func auth(fetchService fetching.Service) func(c *gin.Context) (interface{}, error) {
 	return func(c *gin.Context) (i interface{}, e error) {
 		var req LoginRequest
 		if err := c.ShouldBind(&req); err != nil {
@@ -79,7 +79,7 @@ func authHandlerBuilder(fetchService fetching.DefaultService) func(c *gin.Contex
 	}
 }
 
-func unauthorizedHandler(c *gin.Context, code int, message string) {
+func unauthorized(c *gin.Context, code int, message string) {
 	c.JSON(code, gin.H{
 		"code":    code,
 		"message": message,

@@ -4,22 +4,22 @@ import (
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
 )
 
-type DefaultService interface {
+type Service interface {
 	FetchCounterByID(id string) (counters.Counter, error)
 	FetchUserByID(id string) (counters.User, error)
 	FetchUserByEmail(email string) (counters.User, error)
 }
 
-type Service struct {
+type DefaultService struct {
 	counters counters.CounterRepository
 	users    counters.UserRepository
 }
 
-func NewService(cR counters.CounterRepository, uR counters.UserRepository) Service {
-	return Service{counters: cR, users: uR}
+func NewService(cR counters.CounterRepository, uR counters.UserRepository) DefaultService {
+	return DefaultService{counters: cR, users: uR}
 }
 
-func (s Service) FetchCounterByID(id string) (counters.Counter, error) {
+func (s DefaultService) FetchCounterByID(id string) (counters.Counter, error) {
 	counter, err := s.counters.Get(id)
 	if err != nil {
 		return counters.Counter{}, err
@@ -28,7 +28,7 @@ func (s Service) FetchCounterByID(id string) (counters.Counter, error) {
 	return counter, nil
 }
 
-func (s Service) FetchUserByEmail(email string) (counters.User, error) {
+func (s DefaultService) FetchUserByEmail(email string) (counters.User, error) {
 	user, err := s.users.GetByEmail(email)
 	if err != nil {
 		return counters.User{}, err
@@ -37,7 +37,7 @@ func (s Service) FetchUserByEmail(email string) (counters.User, error) {
 	return user, nil
 }
 
-func (s Service) FetchUserByID(id string) (counters.User, error) {
+func (s DefaultService) FetchUserByID(id string) (counters.User, error) {
 	user, err := s.users.Get(id)
 	if err != nil {
 		return counters.User{}, err

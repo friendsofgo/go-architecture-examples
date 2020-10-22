@@ -12,9 +12,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetUserHandlerBuilder(
-	fetchService fetching.DefaultService,
-) func(c *gin.Context) {
+func GetUser(
+	fetchService fetching.Service,
+) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authorizedUserData, _ := c.Get(server.IdentityKey)
 		authorizedUser := authorizedUserData.(counters.User)
@@ -43,7 +43,7 @@ func GetUserHandlerBuilder(
 	}
 }
 
-func CreateUserHandlerBuilder(createService creating.DefaultService) func(c *gin.Context) {
+func CreateUser(createService creating.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req CreateUserRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
