@@ -10,6 +10,11 @@ import (
 const (
 	ReadTimeoutDefault  = 10 // seconds
 	WriteTimeoutDefault = 10 // seconds
+
+	// Auth config...
+	RealmName   = "REALM NAME IS PENDING TBD"
+	IdentityKey = "auth"
+	AuthKey     = "friendsofgo"
 )
 
 type Server struct {

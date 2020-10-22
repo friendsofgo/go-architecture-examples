@@ -8,6 +8,7 @@ import (
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
+	server "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/platform/server/http"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,8 +16,8 @@ func GetUserHandlerBuilder(
 	fetchService fetching.DefaultService,
 ) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		authorizedUserData, _ := c.Get(jwt.IdentityKey)
-		authorizedUser := authorizedUserData.(jwt.User)
+		authorizedUserData, _ := c.Get(server.IdentityKey)
+		authorizedUser := authorizedUserData.(counters.User)
 
 		userID := c.Param("userID")
 		if authorizedUser.ID != userID {

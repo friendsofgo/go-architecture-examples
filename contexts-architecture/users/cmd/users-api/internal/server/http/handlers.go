@@ -23,6 +23,7 @@ func getUserHandlerBuilder(
 		if authorizedUser.ID != userID {
 			errorMsg := fmt.Sprintf("the user %s cannot read the data of user %s", authorizedUser.ID, userID)
 			c.JSON(http.StatusForbidden, gin.H{"error": errorMsg})
+			return
 		}
 
 		user, err := fetchService.FetchByID(userID)

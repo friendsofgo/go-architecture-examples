@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
@@ -63,5 +64,6 @@ func runServer(
 	auth.GET("/counters/:counterID", counters.GetCounterHandlerBuilder(fetchingService))
 	auth.POST("/counters/increment", counters.IncrementCounterHandlerBuilder(fetchingService, incrementingService))
 
+	log.Println("Server on tap:", httpAddr)
 	return srv.Run()
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/incrementing"
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/platform/server/http/middleware/jwt"
+	server "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/platform/server/http"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,7 +21,7 @@ func CreateCounterHandlerBuilder(createService creating.DefaultService) func(c *
 			return
 		}
 
-		authorizedUserData, _ := c.Get(jwt.IdentityKey)
+		authorizedUserData, _ := c.Get(server.IdentityKey)
 		authorizedUser := authorizedUserData.(counters.User)
 
 		counter, err := createService.CreateCounter(req.Name, authorizedUser.ID)
@@ -56,7 +56,7 @@ func GetCounterHandlerBuilder(fetchService fetching.DefaultService) func(c *gin.
 			return
 		}
 
-		authorizedUserData, _ := c.Get(jwt.IdentityKey)
+		authorizedUserData, _ := c.Get(server.IdentityKey)
 		authorizedUser := authorizedUserData.(counters.User)
 		if authorizedUser.ID != counter.BelongsTo {
 			errMsg := fmt.Sprintf("user id %s is not authorized to read the counter %s", authorizedUser.ID, counterID)
@@ -93,7 +93,7 @@ func IncrementCounterHandlerBuilder(
 			return
 		}
 
-		authorizedUserData, _ := c.Get(jwt.IdentityKey)
+		authorizedUserData, _ := c.Get(server.IdentityKey)
 		authorizedUser := authorizedUserData.(counters.User)
 		if authorizedUser.ID != counter.BelongsTo {
 			errMsg := fmt.Sprintf("user id %s is not authorized to increment the counter %s", authorizedUser.ID, req.ID)

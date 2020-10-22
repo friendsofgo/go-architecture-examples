@@ -5,28 +5,23 @@ import (
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/platform/server/http"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
 )
 
-const (
-	realmName   = "REALM NAME IS PENDING TBD"
-	IdentityKey = "auth"
-	authKey     = "friendsofgo"
-)
-
 // NewGinMiddleware returns a JWT middleware for Gin
 func NewGinMiddleware(fetchService fetching.DefaultService) (*jwt.GinJWTMiddleware, error) {
-	key := []byte(authKey)
+	key := []byte(http.AuthKey)
 
 	return jwt.New(&jwt.GinJWTMiddleware{
-		Realm:           realmName,
+		Realm:           http.RealmName,
 		Key:             key,
 		Timeout:         time.Hour,
 		MaxRefresh:      time.Hour,
-		IdentityKey:     IdentityKey,
+		IdentityKey:     http.IdentityKey,
 		PayloadFunc:     payloadHandler,
 		IdentityHandler: identityHandler,
 		Authenticator:   authHandlerBuilder(fetchService),
