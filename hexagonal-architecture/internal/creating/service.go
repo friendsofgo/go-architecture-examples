@@ -1,8 +1,6 @@
 package creating
 
 import (
-	"fmt"
-
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
 )
 
@@ -28,7 +26,7 @@ func (s *service) CreateCounter(name, belongsTo string) (counters.Counter, error
 
 	err = s.counters.Save(*newCounter)
 	if err != nil {
-		return counters.Counter{}, fmt.Errorf( "counter with name %s cannot be saved", name)
+		return counters.Counter{}, err
 	}
 
 	return *newCounter, nil
@@ -42,7 +40,7 @@ func (s *service) CreateUser(name, email, password string) (counters.User, error
 
 	err = s.users.Save(*newUser)
 	if err != nil {
-		return counters.User{}, fmt.Errorf("user with email %s cannot be saved", email)
+		return counters.User{}, err
 	}
 
 	return *newUser, nil

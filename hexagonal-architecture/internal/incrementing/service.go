@@ -1,8 +1,6 @@
 package incrementing
 
 import (
-	"fmt"
-
 	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
 )
 
@@ -28,7 +26,7 @@ func (s *service) Increment(ID string) error {
 
 	err = s.counters.Save(*counter)
 	if err != nil {
-		return fmt.Errorf("counter with id %s cannot be updated", ID)
+		return err
 	}
 
 	return nil

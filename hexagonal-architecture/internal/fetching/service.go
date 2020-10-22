@@ -16,7 +16,7 @@ type service struct {
 }
 
 func NewService(cR counters.CounterRepository, uR counters.UserRepository) Service {
-	return &service{counters: cR, users: uR}
+	return service{counters: cR, users: uR}
 }
 
 func (s *service) FetchCounterByID(id string) (counters.Counter, error) {

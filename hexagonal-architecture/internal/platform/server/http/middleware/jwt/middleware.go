@@ -4,6 +4,7 @@ import (
 	"time"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
+	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 
@@ -15,13 +16,6 @@ const (
 	IdentityKey = "auth"
 	authKey     = "friendsofgo"
 )
-
-type User struct {
-	ID    string
-	Name  string
-	Email string
-}
-
 
 // NewGinMiddleware returns a JWT middleware for Gin
 func NewGinMiddleware(fetchService fetching.Service) (*jwt.GinJWTMiddleware, error) {
@@ -41,7 +35,7 @@ func NewGinMiddleware(fetchService fetching.Service) (*jwt.GinJWTMiddleware, err
 }
 
 func payloadHandler(data interface{}) jwt.MapClaims {
-	if user, ok := data.(*User); ok {
+	if user, ok := data.(*counters.User); ok {
 		return jwt.MapClaims{
 			"id":    user.ID,
 			"name":  user.Name,
@@ -51,10 +45,9 @@ func payloadHandler(data interface{}) jwt.MapClaims {
 	return jwt.MapClaims{}
 }
 
-
 func identityHandler(c *gin.Context) interface{} {
 	claims := jwt.ExtractClaims(c)
-	return User{
+	return counters.User{
 		ID:    claims["id"].(string),
 		Name:  claims["name"].(string),
 		Email: claims["email"].(string),
@@ -83,7 +76,7 @@ func authHandlerBuilder(fetchService fetching.Service) func(c *gin.Context) (int
 			return nil, jwt.ErrFailedAuthentication
 		}
 
-		return &User{
+		return &counters.User{
 			ID:    user.ID,
 			Name:  user.Name,
 			Email: user.Email,
