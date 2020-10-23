@@ -1,10 +1,10 @@
-# Go Archtictures Examples
+# Go Architectures Examples
 
-Examples of our talks about how to structure the Go code
+Code examples from our talks about how to structure Go code.
 
 # How to run
 
-All this examples are for study purpose, but all the code compile you can tested:
+All these examples are for study purpose, but all the code can be compiled, so you can test it:
 
 ### no-architecture
 ```sh
@@ -36,4 +36,4 @@ $  go run contexts-architecture/users/cmd/users-api/main.go
 ## Links to the videos and slides
 
 * 2019-08-23 GopherCon UK [video](https://www.youtube.com/watch?v=KEUmOomnEqc) | slides pending...
-* 2019-10-06 Software Crafter Bcn 2019 video pending... | [slides](https://bit.ly/bcn-crafters-fogo-talk)
+* 2019-10-06 Software Crafter Bcn 2019 [video](https://www.youtube.com/watch?v=_rpDmUzP_ZI) | [slides](https://bit.ly/bcn-crafters-fogo-talk)
