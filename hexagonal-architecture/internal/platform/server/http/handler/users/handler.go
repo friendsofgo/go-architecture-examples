@@ -1,34 +1,33 @@
-package http
+package users
 
 import (
 	"fmt"
 	"net/http"
 
-	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/kit/errors"
-	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/cmd/users-api/internal/server/http/jwt"
-	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/internal/users/creating"
-	"github.com/friendsofgo/go-architecture-examples/contexts-architecture/users/internal/users/fetching"
-
+	"github.com/friendsofgo/errors"
+	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/creating"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
+	server "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/platform/server/http"
 	"github.com/gin-gonic/gin"
 )
 
-func getUserHandlerBuilder(
+func GetUser(
 	fetchService fetching.Service,
-) func(c *gin.Context) {
+) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authorizedUserData, _ := c.Get(jwt.IdentityKey)
-		authorizedUser := authorizedUserData.(jwt.User)
+		authorizedUserData, _ := c.Get(server.IdentityKey)
+		authorizedUser := authorizedUserData.(counters.User)
 
 		userID := c.Param("userID")
 		if authorizedUser.ID != userID {
 			errorMsg := fmt.Sprintf("the user %s cannot read the data of user %s", authorizedUser.ID, userID)
 			c.JSON(http.StatusForbidden, gin.H{"error": errorMsg})
-			return
 		}
 
-		user, err := fetchService.FetchByID(userID)
+		user, err := fetchService.FetchUserByID(userID)
 		if err != nil {
-			if errors.IsNotFound(err) {
+			if errors.Is(err, counters.ErrUserNotFound) {
 				c.JSON(http.StatusNotFound, gin.H{"error": err})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err})
@@ -44,7 +43,7 @@ func getUserHandlerBuilder(
 	}
 }
 
-func createUserHandlerBuilder(createService creating.Service) func(c *gin.Context) {
+func CreateUser(createService creating.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req CreateUserRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
@@ -52,9 +51,9 @@ func createUserHandlerBuilder(createService creating.Service) func(c *gin.Contex
 			return
 		}
 
-		user, err := createService.Create(req.Name, req.Email, req.Password)
+		user, err := createService.CreateUser(req.Name, req.Email, req.Password)
 		if err != nil {
-			if errors.IsWrongInput(err) {
+			if errors.Is(err, counters.ErrCreatingUser) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

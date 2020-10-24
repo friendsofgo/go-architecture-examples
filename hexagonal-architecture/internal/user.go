@@ -1,10 +1,17 @@
 package counters
 
 import (
+	"errors"
+	"fmt"
+
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/errors"
 	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/kit/ulid"
+)
+
+var (
+	ErrUserNotFound = errors.New("user not found")
+	ErrCreatingUser = errors.New("error happened while creating a new user")
 )
 
 type User struct {
@@ -14,9 +21,7 @@ type User struct {
 	HashedPassword string
 }
 
-func NewUser(name, email, password string) (*User, error) {
-	// validations about your user creation here...
-
+func NewUser(name, email, password string) (User, error) {
 	u := User{
 		ID:    ulid.New(),
 		Name:  name,
@@ -25,11 +30,10 @@ func NewUser(name, email, password string) (*User, error) {
 
 	err := u.HashPassword(password)
 	if err != nil {
-		return nil, errors.WrapWrongInput(err, "user password %s cannot be hashed", password)
+		return User{}, fmt.Errorf("password cannot be hashed correctly: %w", ErrCreatingUser)
 	}
 
-
-	return &u, nil
+	return u, nil
 }
 
 func (u *User) HashPassword(password string) error {
@@ -42,7 +46,7 @@ func (u *User) HashPassword(password string) error {
 }
 
 type UserRepository interface {
-	Get(ID string) (*User, error)
-	GetByEmail(email string) (*User, error)
+	Get(ID string) (User, error)
+	GetByEmail(email string) (User, error)
 	Save(user User) error
 }

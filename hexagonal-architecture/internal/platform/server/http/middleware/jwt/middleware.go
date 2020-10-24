@@ -4,44 +4,33 @@ import (
 	"time"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
+	counters "github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/platform/server/http"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetcher"
+	"github.com/friendsofgo/go-architecture-examples/hexagonal-architecture/internal/fetching"
 )
 
-const (
-	realmName   = "REALM NAME IS PENDING TBD"
-	IdentityKey = "auth"
-	authKey     = "friendsofgo"
-)
-
-type User struct {
-	ID    string
-	Name  string
-	Email string
-}
-
-
-// NewGinMiddleware returns a JWT middleware for Gin
-func NewGinMiddleware(fetchService fetcher.Service) (*jwt.GinJWTMiddleware, error) {
-	key := []byte(authKey)
+// NewMiddleware returns a JWT middleware for Gin
+func NewMiddleware(fetchService fetching.Service) (*jwt.GinJWTMiddleware, error) {
+	key := []byte(http.AuthKey)
 
 	return jwt.New(&jwt.GinJWTMiddleware{
-		Realm:           realmName,
+		Realm:           http.RealmName,
 		Key:             key,
 		Timeout:         time.Hour,
 		MaxRefresh:      time.Hour,
-		IdentityKey:     IdentityKey,
+		IdentityKey:     http.IdentityKey,
 		PayloadFunc:     payloadHandler,
 		IdentityHandler: identityHandler,
-		Authenticator:   authHandlerBuilder(fetchService),
-		Unauthorized:    unauthorizedHandler,
+		Authenticator:   auth(fetchService),
+		Unauthorized:    unauthorized,
 	})
 }
 
 func payloadHandler(data interface{}) jwt.MapClaims {
-	if user, ok := data.(*User); ok {
+	if user, ok := data.(*counters.User); ok {
 		return jwt.MapClaims{
 			"id":    user.ID,
 			"name":  user.Name,
@@ -51,10 +40,9 @@ func payloadHandler(data interface{}) jwt.MapClaims {
 	return jwt.MapClaims{}
 }
 
-
 func identityHandler(c *gin.Context) interface{} {
 	claims := jwt.ExtractClaims(c)
-	return User{
+	return counters.User{
 		ID:    claims["id"].(string),
 		Name:  claims["name"].(string),
 		Email: claims["email"].(string),
@@ -66,7 +54,7 @@ type LoginRequest struct {
 	Password string `form:"password" json:"password" binding:"required"`
 }
 
-func authHandlerBuilder(fetchService fetcher.Service) func(c *gin.Context) (interface{}, error) {
+func auth(fetchService fetching.Service) func(c *gin.Context) (interface{}, error) {
 	return func(c *gin.Context) (i interface{}, e error) {
 		var req LoginRequest
 		if err := c.ShouldBind(&req); err != nil {
@@ -83,7 +71,7 @@ func authHandlerBuilder(fetchService fetcher.Service) func(c *gin.Context) (inte
 			return nil, jwt.ErrFailedAuthentication
 		}
 
-		return &User{
+		return &counters.User{
 			ID:    user.ID,
 			Name:  user.Name,
 			Email: user.Email,
@@ -91,7 +79,7 @@ func authHandlerBuilder(fetchService fetcher.Service) func(c *gin.Context) (inte
 	}
 }
 
-func unauthorizedHandler(c *gin.Context, code int, message string) {
+func unauthorized(c *gin.Context, code int, message string) {
 	c.JSON(code, gin.H{
 		"code":    code,
 		"message": message,
